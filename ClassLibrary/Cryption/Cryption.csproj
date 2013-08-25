@@ -8,8 +8,8 @@
     <ProjectGuid>{39440C40-D1A0-4CBE-A59B-2FB6E6864478}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Encryption</RootNamespace>
-    <AssemblyName>EnCryption</AssemblyName>
+    <RootNamespace>Cryption</RootNamespace>
+    <AssemblyName>Cryption</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,6 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Decryptor.cs" />
+    <Compile Include="DecryptTransformer.cs" />
+    <Compile Include="Encryptor.cs" />
+    <Compile Include="EncryptTransformer.cs" />
     <Compile Include="Crypt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

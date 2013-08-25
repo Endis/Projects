@@ -1,28 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Cryption;
+using System.Text;
 
 namespace Test
 {
     public partial class CryptTest : Form
     {
+        EncryptionAlgorithm encryptionAlgorithm;
         public CryptTest()
         {
-            InitializeComponent();
+            InitializeComponent(); 
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Cryption.Crypt crypt = new Cryption.Crypt();
-            if (textBox1.Text !="")
+            Crypt crypt = new Crypt();
+            if (tbString.Text !="")
             {
-                textBox2.Text = crypt.Encryption(textBox1.Text);
+                tbEncrypt.Text = crypt.Encryption(tbString.Text);
             }
             else
             {
@@ -34,10 +30,10 @@ namespace Test
         {
             try
             {
-                Cryption.Crypt crypt = new Cryption.Crypt();
-                if (textBox2.Text != "")
+                Crypt crypt = new Crypt();
+                if (tbEncrypt.Text != "")
                 {
-                    textBox3.Text = crypt.Decryption(textBox2.Text);
+                    tbDecrypt.Text = crypt.Decryption(tbEncrypt.Text);
                 }
                 else
                 {
@@ -53,14 +49,79 @@ namespace Test
 
         private void PwdCryptBtn_Click(object sender, EventArgs e)
         {
-            Cryption.Crypt crypt = new Cryption.Crypt();
-            if (textBox1.Text != "")
+            Crypt crypt = new Crypt();
+            if (tbString.Text != "")
             {
-                textBox2.Text = crypt.EncryptPassword(textBox1.Text);
+                tbEncrypt.Text = crypt.EncryptPassword(tbString.Text);
             }
             else
             {
                 MessageBox.Show("请输入字符串");
+            }
+        }
+
+        private void EncryptorBtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                RadioButtonSelect();
+                Encryptor encryptor = new Encryptor(encryptionAlgorithm);
+                if (tbString.Text != "")
+                {
+                    Byte[] bt = encryptor.Encrypt(System.Text.Encoding.Default.GetBytes(tbString.Text), Encoding.Default.GetBytes(tbKey.Text));
+                    tbEncrypt.Text = Convert.ToBase64String(bt);
+                }
+                else
+                {
+                    MessageBox.Show("请输入字符串");
+                }
+            }
+            catch (Exception)
+            {
+
+                MessageBox.Show("加密失败，确认密钥是否符合数位要求！"); 
+            }
+        }
+
+        private void DecryptorBtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                RadioButtonSelect();
+                Decryptor decryptor = new Decryptor(encryptionAlgorithm);
+                if (tbEncrypt.Text != "")
+                {
+                    Byte[] bt = decryptor.Decrypt(Convert.FromBase64String(tbEncrypt.Text), System.Text.Encoding.Default.GetBytes(tbKey.Text));
+                    tbDecrypt.Text = Encoding.Default.GetString(bt);
+                }
+                else
+                {
+                    MessageBox.Show("请输入字符串");
+                }
+            }
+            catch (Exception)
+            {
+
+                MessageBox.Show("加密失败，确认密钥是否符合数位要求,或者，字符串是否有效...");
+            }
+        }
+        private void RadioButtonSelect()
+        {
+            if (Rc2Rdbtn.Checked)
+            {
+                encryptionAlgorithm = EncryptionAlgorithm.Rc2;
+            }
+            else if (RijndaelRdbtn.Checked)
+            {
+                encryptionAlgorithm = EncryptionAlgorithm.Rijndael;
+            }
+            else if (TripleDesRdbtn.Checked)
+            {
+                encryptionAlgorithm = EncryptionAlgorithm.TripleDes;
+            }
+            else
+            {
+                encryptionAlgorithm = EncryptionAlgorithm.Des;
             }
         }
     }
